@@ -184,7 +184,7 @@ class _HomeState extends State<Home> {
                   child: GestureDetector(
                     child: Text(
                         "Não tem conta? cadastre-se!",
-                      style: TextStyle(color: Colors.black38),
+                      style: TextStyle(color: Colors.black),
                     ),
                     onTap: (){
                       Navigator.pushNamed(context, "/cadastro");

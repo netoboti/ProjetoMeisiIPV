@@ -103,6 +103,12 @@ class _CadastroState extends State<Cadastro> {
         title: Text("Cadastro"),
       ),
       body: Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("imagens/fundo.png"),
+                fit: BoxFit.cover
+            )
+        ),
         padding: EdgeInsets.all(16),
         child: Center(
           child: SingleChildScrollView(
@@ -177,7 +183,7 @@ class _CadastroState extends State<Cadastro> {
                         "Cadastrar",
                         style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
-                      color: Color(0xff1ebbd8),
+                      color: Color(0xffe5c100),
                       padding: EdgeInsets.fromLTRB(32, 16, 32, 16),
                       onPressed: (){
                         _validarCampos();
