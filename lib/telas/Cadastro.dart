@@ -163,16 +163,17 @@ class _CadastroState extends State<Cadastro> {
                   padding: EdgeInsets.only(bottom: 10),
                   child: Row(
                     children: <Widget>[
-                      Text("Passageiro"),
-                      Switch(
+                      //Text("Passageiro"),
+                      //Text("Motorista"),
+                      /*Switch(
                           value: _tipoUsuario,
                           onChanged: (bool valor){
                             setState(() {
                               _tipoUsuario = valor;
                             });
                           }
-                      ),
-                      Text("Motorista"),
+                      ),*/
+                     // _tipoUsuario = 0,
                     ],
                   ),
                 ),
