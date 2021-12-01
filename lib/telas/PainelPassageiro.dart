@@ -23,11 +23,11 @@ class PainelPassageiro extends StatefulWidget {
 
 class _PainelPassageiroState extends State<PainelPassageiro> {
   TextEditingController _controllerDestino =
-      TextEditingController(text: "R. Heitor Penteado, 800");
+      TextEditingController(text: "R. Conselheiro Afonso de Melo, Viseu, Portugal");
   List<String> itensMenu = ["Configurações", "Deslogar"];
   Completer<GoogleMapController> _controller = Completer();
   CameraPosition _posicaoCamera =
-      CameraPosition(target: LatLng(-23.563999, -46.653256));
+      CameraPosition(target: LatLng(40.657102,-7.914824), zoom:15);
   Set<Marker> _marcadores = {};
   String _idRequisicao;
   Position _localPassageiro;
@@ -420,11 +420,11 @@ class _PainelPassageiroState extends State<PainelPassageiro> {
     double valorViagem = distanciaKm * 8;
 
     //Formatar valor viagem
-    var f = new NumberFormat("#,##0.00", "pt_BR");
+    var f = new NumberFormat("#,##0.00", "pt_PT");
     var valorViagemFormatado = f.format( valorViagem );
 
     _alterarBotaoPrincipal(
-        "Total - R\$ ${valorViagemFormatado}",
+        "Total - € ${valorViagemFormatado}",
         Colors.green,
         (){}
     );
@@ -678,7 +678,6 @@ class _PainelPassageiroState extends State<PainelPassageiro> {
               //myLocationEnabled: true,
               myLocationButtonEnabled: false,
               markers: _marcadores,
-              //-23,559200, -46,658878
             ),
             Visibility(
               visible: _exibirCaixaEnderecoDestino,

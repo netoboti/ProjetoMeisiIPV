@@ -25,7 +25,7 @@ class _CorridaState extends State<Corrida> {
 
   Completer<GoogleMapController> _controller = Completer();
   CameraPosition _posicaoCamera =
-  CameraPosition(target: LatLng(-23.563999, -46.653256));
+  CameraPosition(target: LatLng(40.655714,-7.916161));
   Set<Marker> _marcadores = {};
   Map<String, dynamic> _dadosRequisicao;
   String _idRequisicao;
