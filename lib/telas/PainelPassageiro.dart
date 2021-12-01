@@ -27,7 +27,7 @@ class _PainelPassageiroState extends State<PainelPassageiro> {
   List<String> itensMenu = ["Configurações", "Deslogar"];
   Completer<GoogleMapController> _controller = Completer();
   CameraPosition _posicaoCamera =
-      CameraPosition(target: LatLng(40.657102,-7.914824), zoom:15);
+      CameraPosition(target: LatLng(40.657102,-7.914824), zoom:5);
   Set<Marker> _marcadores = {};
   String _idRequisicao;
   Position _localPassageiro;
