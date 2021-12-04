@@ -1,5 +1,5 @@
 import 'package:ProjetoMeisiIPV/loc_screen.dart';
-import 'package:ProjetoMeisiIPV/mapa.dart';
+import 'package:ProjetoMeisiIPV/marcadores.dart';
 import 'package:ProjetoMeisiIPV/models/user_loc.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
       context,
       MaterialPageRoute(
         builder: (context) {
-          return Mapa();
+          return MapsDemo();
         },
       ),
     );
