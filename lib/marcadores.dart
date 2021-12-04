@@ -60,18 +60,19 @@ class _MarcadoresState extends State<Marcadores> {
         markerId: MarkerId(showLocation.toString()),
         position: showLocation, //position of marker
         infoWindow: InfoWindow( //popup info
-          title: 'Park Area ',
-          snippet: 'Park Area',
+          title: 'Park Area 1',
+          snippet: 'Sem vagas disponíveis',
         ),
+      onTap: (){},
         icon: BitmapDescriptor.defaultMarker, //Icon for Marker
       ));
 
       markers.add(Marker( //add second marker
         markerId: MarkerId(showLocation.toString()),
-        position: LatLng(40.638139, -7.927002), //position of marker
+        position: LatLng(40.638139, -7.927001), //position of marker
         infoWindow: InfoWindow( //popup info
-          title: 'Park Area ',
-          snippet: 'Park Area',
+          title: 'Park Area',
+          snippet: 'Sem vagas disponíveis',
         ),
         icon: BitmapDescriptor.defaultMarker, //Icon for Marker
       ));
@@ -80,8 +81,8 @@ class _MarcadoresState extends State<Marcadores> {
         markerId: MarkerId(showLocation.toString()),
         position: LatLng(40.638556, -7.926862), //position of marker
         infoWindow: InfoWindow( //popup info
-          title: 'Park Area ',
-          snippet: 'Park Area',
+          title: 'Park Area',
+          snippet: 'Vagas disponíveis',
         ),
         icon: BitmapDescriptor.defaultMarker, //Icon for Marker
       ));
@@ -90,8 +91,8 @@ class _MarcadoresState extends State<Marcadores> {
         markerId: MarkerId(showLocation.toString()),
         position: LatLng(40.63865, -7.92712), //position of marker
         infoWindow: InfoWindow( //popup info
-          title: 'Park Area ',
-          snippet: 'Park Area',
+          title: 'Park Area',
+          snippet: 'Sem vagas disponíveis',
         ),
         icon: BitmapDescriptor.defaultMarker, //Icon for Marker
       ));
