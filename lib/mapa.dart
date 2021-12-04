@@ -86,6 +86,8 @@ class _MapaState extends State<Mapa> {
     );
   }
 
+
+
   Set<Marker> getmarkers() { //markers to place on map
     setState(() {
       markers.add(Marker( //add first marker
@@ -133,8 +135,8 @@ class _MapaState extends State<Mapa> {
         markerId: MarkerId(showLocation.toString()),
         position: LatLng(40.637785, -7.927415), //position of marker
         infoWindow: InfoWindow( //popup info
-          title: 'Park Area ',
-          snippet: 'Park Area',
+          title: 'Park Area',
+          snippet: 'Sem vagas disponíveis',
         ),
         icon: BitmapDescriptor.defaultMarker, //Icon for Marker
       ));

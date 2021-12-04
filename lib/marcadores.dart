@@ -1,115 +1,297 @@
-import 'package:ProjetoMeisiIPV/home_page.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
+
+GoogleMapController mapController;
+
+class MapsDemo extends StatefulWidget {
+  MapsDemo() : super();
 
 
-class Marcadores extends StatefulWidget{
+
   @override
-  _MarcadoresState createState() => _MarcadoresState();
+  MapsDemoState createState() => MapsDemoState();
 }
 
-class _MarcadoresState extends State<Marcadores> {
+class MapsDemoState extends State<MapsDemo> {
+  //
 
-  GoogleMapController mapController; //contrller for Google map
-  final Set<Marker> markers = new Set(); //markers for google map
-  static const LatLng showLocation = const LatLng(40.63913, -7.925455); //location to show in map
+  Completer<GoogleMapController> _controller = Completer();
+  static const LatLng _center = const LatLng(38.82082, -9.09043);
+  final Set<Marker> _markers = {};
+  LatLng _lastMapPosition = _center;
+  MapType _currentMapType = MapType.normal;
+
+
+  void _currentLocation() async {
+    final GoogleMapController controller = await _controller.future;
+    LocationData currentLocation;
+    var location = new Location();
+    try {
+      currentLocation = await location.getLocation();
+    } on Exception {
+      currentLocation = null;
+    }
+
+    controller.animateCamera(CameraUpdate.newCameraPosition(
+      CameraPosition(
+        bearing: 0,
+        target: LatLng(currentLocation.latitude, currentLocation.longitude),
+        zoom: 18.0,
+      ),
+    ));
+  }
+
+  _onMapCreated(GoogleMapController controller) {
+    _controller.complete(controller);
+  }
+
+  _onCameraMove(CameraPosition position) {
+    _lastMapPosition = position.target;
+  }
+
+  _onMapTypeButtonPressed() {
+    setState(() {
+      _currentMapType = _currentMapType == MapType.normal
+          ? MapType.hybrid
+          : MapType.normal;
+    });
+  }
+
+  _onAddMarkerButtonPressed() {
+    _currentLocation();
+    setState(() {
+      _markers.add(
+          Marker(
+              markerId: MarkerId(_lastMapPosition.toString()),
+              position: _lastMapPosition,
+              infoWindow: InfoWindow(
+                  title: "Parking",
+                  snippet: "Há Vagas Disponíveis",
+                  onTap: (){
+                  }
+              ),
+              onTap: (){
+              },
+              icon: BitmapDescriptor.defaultMarker));
+    });
+  }
+
+  _onAddMarkerButtonPressedSem() {
+    _currentLocation();
+    setState(() {
+      _markers.add(
+          Marker(
+              markerId: MarkerId(_lastMapPosition.toString()),
+              position: _lastMapPosition,
+              infoWindow: InfoWindow(
+                  title: "Parking",
+                  snippet: "Sem vagas Disponíveis",
+                  onTap: (){
+                  }
+              ),
+              onTap: (){
+              },
+              icon: BitmapDescriptor.defaultMarker));
+    });
+  }
+
+  Widget button(Function function, IconData icon) {
+    return FloatingActionButton(
+      onPressed: function,
+      materialTapTargetSize: MaterialTapTargetSize.padded,
+      backgroundColor: Color(0xffe5c100),
+      child: Icon(
+        icon,
+        size: 36.0,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    return MaterialApp(
 
-    return  Scaffold(
-      appBar: AppBar(
-        title: Text("Área p/ Parking"),
-        backgroundColor: Color(0xffe5c100),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-            onPressed: () {
-            Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-            builder: (context) {
-            return HomePage();
-        },
-        ),
-        );
-        },
-        ),
-      ),
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
 
-    body: GoogleMap( //Map widget from google_maps_flutter package
-        zoomGesturesEnabled: true, //enable Zoom in, out on map
-        initialCameraPosition: CameraPosition( //innital position in map
-          target: showLocation, //initial position
-          zoom: 15.0, //initial zoom level
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(40),
+
+          child: AppBar(
+            automaticallyImplyLeading: false,
+            centerTitle: true,
+            title:  Column(
+              children: <Widget>[
+                const Text("Mapa - ParkingM", style: TextStyle(fontSize: 30.0),textAlign: TextAlign.center,),
+                const Text("", style: TextStyle(fontSize: 13.0),textAlign: TextAlign.center,),
+              ],
+            ),
+            flexibleSpace: Container(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: <Color>[
+                      Color(0xffe5c100),
+                      Color(0xffa39322),
+                      ])
+              ),
+
+            ),
+          ),
         ),
-        markers: getmarkers(), //markers to show on map
-        mapType: MapType.normal, //map type
-        onMapCreated: (controller) { //method called when map is created
-          setState(() {
-            mapController = controller;
-          });
-        },
+        body:
+        Stack(
+
+          children: <Widget>[
+
+            GoogleMap(
+              padding: new EdgeInsets.all(3.0),
+              onMapCreated: _onMapCreated,
+
+              initialCameraPosition: CameraPosition(
+                target: _center,
+                zoom: 6.0,
+              ),
+              mapType: _currentMapType,
+              markers: _markers,
+              myLocationEnabled: true,
+              myLocationButtonEnabled: false,
+              onCameraMove: _onCameraMove,
+            ),
+            Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Column(
+                  children: <Widget>[
+                    button(_onMapTypeButtonPressed, Icons.map),
+                    SizedBox(
+                      height: 18.0,
+                      child: new Text('Vista Cidade',
+                        style: new TextStyle(fontSize: 11.0,
+                        ),
+                      ),
+                    ),
+                    button(_onAddMarkerButtonPressed, Icons.add_location),
+                    SizedBox(
+                      height: 18.0,
+                      child: new Text('Vagas livres',
+                        style: new TextStyle(fontSize: 11.0,
+                        ),
+                      ),
+                    ),
+                    button(_onAddMarkerButtonPressedSem, Icons.location_off_rounded
+                    ),
+                    SizedBox(
+                      height: 18.0,
+                      child: new Text('Sem vagas',
+                        style: new TextStyle(fontSize: 11.0,
+                      ),
+                      ),
+                      ),
+                    button(_currentLocation, Icons.location_searching),
+                    SizedBox(
+                      height: 18.0,
+                      child: new Text('Minha localização',
+                        style: new TextStyle(fontSize: 11.0,
+                      ),
+                      ),
+                    ),
+
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+        drawer: Drawer(
+          child: ListView(
+            padding: new EdgeInsets.all(0.0),
+            children: <Widget>[
+              DrawerHeader(
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(colors: <Color>[
+                        Colors.blue,
+                        Colors.lightBlueAccent
+                      ])
+                  ),
+                  child: Container(
+                    child: Column(
+                      children: <Widget>[
+                        Material(
+                          borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                          elevation: 10,
+                          child: Padding(padding: EdgeInsets.all(8.0),
+                            child: Image.asset('images/a.png',width: 80,height: 80,),
+                          ),
+                        ),
+                        Padding(padding: EdgeInsets.all(2.0), child: Text ('Viewist', style: TextStyle(color: Colors.white, fontSize: 30.0,),
+                        )
+                        )],
+                    ),
+                  )),
+              CustomListTile(Icons.person, 'Profile', ()=>{}),
+              CustomListTile(Icons.notifications, 'Notification', ()=>{}),
+              CustomListTile(Icons.settings, 'Settings', ()=>{}),
+              CustomListTile(Icons.lock, 'Log Out', ()=>{}),
+            ],
+          ),
+        ),
+
       ),
 
     );
   }
+}
 
-  Set<Marker> getmarkers() { //markers to place on map
-    setState(() {
-      markers.add(Marker( //add first marker
-        markerId: MarkerId(showLocation.toString()),
-        position: showLocation, //position of marker
-        infoWindow: InfoWindow( //popup info
-          title: 'Park Area 1',
-          snippet: 'Sem vagas disponíveis',
+class CustomListTile extends StatelessWidget {
+  IconData icon;
+  String text;
+  Function onTap;
+
+  CustomListTile(this.icon,this.text,this.onTap);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement createState
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+      child: Container(
+        decoration: BoxDecoration(
+            border: Border(bottom: BorderSide(color: Colors.grey.shade400))
         ),
-      onTap: (){},
-        icon: BitmapDescriptor.defaultMarker, //Icon for Marker
-      ));
-
-      markers.add(Marker( //add second marker
-        markerId: MarkerId(showLocation.toString()),
-        position: LatLng(40.638139, -7.927001), //position of marker
-        infoWindow: InfoWindow( //popup info
-          title: 'Park Area',
-          snippet: 'Sem vagas disponíveis',
+        child: InkWell(
+          splashColor: Colors.lightBlueAccent,
+          onTap: onTap,
+          child: Container(
+            height: 50,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Icon(icon),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(text, style: TextStyle(
+                          fontSize: 16.0
+                      ),),
+                    ),
+                  ],
+                ),
+                Icon(Icons.arrow_right)
+              ],
+            ),
+          ),
         ),
-        icon: BitmapDescriptor.defaultMarker, //Icon for Marker
-      ));
+      ),
+    );
 
-      markers.add(Marker( //add third marker
-        markerId: MarkerId(showLocation.toString()),
-        position: LatLng(40.638556, -7.926862), //position of marker
-        infoWindow: InfoWindow( //popup info
-          title: 'Park Area',
-          snippet: 'Vagas disponíveis',
-        ),
-        icon: BitmapDescriptor.defaultMarker, //Icon for Marker
-      ));
-
-      markers.add(Marker( //add third marker
-        markerId: MarkerId(showLocation.toString()),
-        position: LatLng(40.63865, -7.92712), //position of marker
-        infoWindow: InfoWindow( //popup info
-          title: 'Park Area',
-          snippet: 'Sem vagas disponíveis',
-        ),
-        icon: BitmapDescriptor.defaultMarker, //Icon for Marker
-      ));
-
-      markers.add(Marker( //add third marker
-        markerId: MarkerId(showLocation.toString()),
-        position: LatLng(40.637785, -7.927415), //position of marker
-        infoWindow: InfoWindow( //popup info
-          title: 'Park Area ',
-          snippet: 'Park Area',
-        ),
-        icon: BitmapDescriptor.defaultMarker, //Icon for Marker
-      ));
-      //add more markers here
-
-    });
-
-    return markers;
   }
+
+
 }
