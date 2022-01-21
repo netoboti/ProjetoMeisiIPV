@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:ProjetoMeisiIPV/home_page.dart';
+
 
 GoogleMapController mapController;
 
@@ -10,13 +12,11 @@ class MapsDemo extends StatefulWidget {
   MapsDemo() : super();
 
 
-
   @override
   MapsDemoState createState() => MapsDemoState();
 }
 
 class MapsDemoState extends State<MapsDemo> {
-  //
 
   Completer<GoogleMapController> _controller = Completer();
   static const LatLng _center = const LatLng(38.82082, -9.09043);
@@ -123,10 +123,23 @@ class MapsDemoState extends State<MapsDemo> {
           child: AppBar(
             automaticallyImplyLeading: false,
             centerTitle: true,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return HomePage();
+                    },
+                  ),
+                );
+              },
+            ),
             title:  Column(
               children: <Widget>[
-                const Text("Mapa - ParkingM", style: TextStyle(fontSize: 30.0),textAlign: TextAlign.center,),
-                const Text("", style: TextStyle(fontSize: 13.0),textAlign: TextAlign.center,),
+                const Text("Mapa - ParkingM", style: TextStyle(fontSize: 20.0),textAlign: TextAlign.center,),
+                //const Text("", style: TextStyle(fontSize: 13.0),textAlign: TextAlign.center,),
               ],
             ),
             flexibleSpace: Container(

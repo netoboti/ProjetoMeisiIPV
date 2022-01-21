@@ -13,7 +13,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<String> itensMenu = ["Histórico","Localização Atual", "Mapa"];
+
   Position _currentPosition;
+
   // Storing Location
   final database = user_loc_db.openDB();
 
@@ -55,8 +57,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  _deslogarUsuario() {}
-
   void storeLocation() {
     UserLocation location = UserLocation(
         id: 1,
@@ -64,6 +64,7 @@ class _HomePageState extends State<HomePage> {
         userLat: _currentPosition.latitude,
         userLon: _currentPosition.longitude);
     user_loc_db.manipulateDatabase(location, database);
+
   }
 
   @override
@@ -102,21 +103,9 @@ class _HomePageState extends State<HomePage> {
                 padding: EdgeInsets.only(bottom: 32),
                 child: Image.asset(
                   "lib/imagens/logo.png",
-                  width: 200,
-                  height: 150,
+                  width: 250,
+                  height: 200,
                 ),
-              ),
-              FlatButton(
-                child: Text("Capturar a localização atual"),
-                onPressed: () {
-                  _getCurrentLocation();
-                },
-              ),
-              FlatButton(
-                child: Text("Mostrar a localização"),
-                onPressed: () {
-                  queryScores();
-                },
               ),
 
             ],
@@ -134,7 +123,6 @@ class _HomePageState extends State<HomePage> {
         .then((Position position) {
       setState(() {
         _currentPosition = position;
-
         storeLocation();
       });
     }).catchError((e) {

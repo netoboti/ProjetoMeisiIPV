@@ -52,6 +52,15 @@ class LocScreen extends StatelessWidget {
               ),
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 15.0),
+            child: Center(
+              child: Text(
+                "Vagas",
+                style: kHighScoreTableHeaders,
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -62,6 +71,7 @@ class LocScreen extends StatelessWidget {
       var locDate = row[0];
       var lat = row[1];
       var lon = row[2];
+      var vagas = row[3];
       //var scoreDate = date;
 
       Widget item = TableCell(
@@ -100,9 +110,19 @@ class LocScreen extends StatelessWidget {
           ),
         ),
       );
+      Widget item3 = TableCell(
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 15.0),
+          child: Text(
+            'Sim',
+            style: kHighScoreTableRowsStyle,
+            textAlign: TextAlign.left,
+          ),
+        ),
+      );
       rows.add(
         TableRow(
-          children: [item, item1, item2],
+          children: [item, item1, item2, item3],
         ),
       );
     }

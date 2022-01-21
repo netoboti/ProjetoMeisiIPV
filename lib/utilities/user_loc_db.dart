@@ -9,7 +9,7 @@ Future<Database> openDB() async {
     join(await getDatabasesPath(), 'user_loc_db.db'),
     onCreate: (db, version) {
       return db.execute(
-        "CREATE TABLE locations(id INTEGER PRIMARY KEY AUTOINCREMENT, locDateTime TEXT, userLat DOUBLE, userLon DOUBLE)",
+        "CREATE TABLE locations(id INTEGER PRIMARY KEY AUTOINCREMENT, locDateTime TEXT, userLat DOUBLE, userLon DOUBLE, vagas TEXT)",
       );
     },
     version: 1,
@@ -39,6 +39,7 @@ Future<List<UserLocation>> locations(final database) async {
       locDateTime: maps[i]['locDateTime'],
       userLat: maps[i]['userLat'],
       userLon: maps[i]['userLon'],
+      vagas: maps[i]['vagas'],
     );
   });
 }
